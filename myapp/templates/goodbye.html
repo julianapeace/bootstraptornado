@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>    {% block title %}
+        Goodbye Title
+        {% endblock %}
+      </title>
+      {% block head %}
+      <style type="text/css">
+      .jumbotron {
+        background-image: url("https://i.imgur.com/IllyUSe.jpg");
+      }
+      </style>
+      {% endblock %}
+
+
+  </head>
+  <body>
+    {% block jumbotron %}
+    GOODBYE
+    {% endblock %}
+
+    {%block emoji1%}
+    <img class="card-img-top" src="https://i.pinimg.com/736x/b0/5d/72/b05d72a43306bb2d200720ccb082c2ae--emoji-faces-smiley-faces.jpg" alt="cool emoji">
+    {%endblock%}
+
+    {%block emoji2%}
+    <img class="card-img-top" src="https://i.pinimg.com/736x/e9/cb/03/e9cb0399513d3075c98bd8650eee8b30--emoji-faces-smiley-faces.jpg" alt="cool emoji">
+    {%endblock%}
+
+    {%block emoji3%}
+    <img class="card-img-top" src="http://www.papertraildesign.com/wp-content/uploads/2017/06/emoji-nerd-glasses.png" alt="cool emoji">
+    {%endblock%}
+
+    {% block travelimg1%}
+    <img class="img-fluid" src="\static\img\raising-hands.png" alt="cheer hands emoji">
+    {%endblock%}
+
+    {%block travel1%}Cheer{%endblock%}
+
+    {% block travelimg2%}
+    <img class="img-fluid" src="http://d2trtkcohkrm90.cloudfront.net/images/emoji/apple/ios-10/256/ok-hand-medium-light-skin-tone.png" alt="cheer hands emoji">
+    {%endblock%}
+
+    {%block travel2%}
+    OK
+    {%endblock%}
+
+
+  </body>
+</html>

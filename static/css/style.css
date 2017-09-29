@@ -1,0 +1,72 @@
+.travel img {
+  max-width: 30%;
+}
+
+h1, h2, h3, h4 {
+  text-align: center;
+}
+
+.jumbotron {
+  background-image: url("https://i.imgur.com/VU4Bvo4.jpg");
+}
+
+.vertical-center {
+  min-height: 100%;
+  /* Fallback for browsers do NOT support vh unit */
+  min-height: 70vh;
+  /* These two lines are counted as one :-)       */
+  display: flex;
+  align-items: center;
+}
+
+.travel {
+  padding: 50px;
+}
+
+.footer {
+  padding: 50px;
+}
+
+@media all and (min-width: 1024px) and (max-width: 1280px) {
+  .navbar {
+    width: 100%;
+  }
+  .emojis {
+    width: 100%;
+  }
+  .jumbotron {
+    height: 100vh;
+  }
+}
+
+@media all and (min-width: 768px) and (max-width: 1024px) {
+  .navbar {
+    width: 100%;
+  }
+  .jumbotron {
+    height: 100vh;
+  }
+  .travel img{
+    max-width: 50%;
+  }
+}
+
+@media all and (min-width: 480px) and (max-width: 768px) {}
+
+@media all and (max-width: 480px) {
+  .navbar {
+    width: 100%;
+  }
+  .jumbotron {
+    height: 100vh;
+  }
+  .emojis {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) and (orientation: landscape) {
+  .jumbotron {
+    height: 100vh;
+  }
+}

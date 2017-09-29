@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>    {% block title %}
+        Hello Title
+        {% endblock %}
+      </title>
+      {% block head %}
+      <style type="text/css">
+      .jumbotron {
+        background-image: url("https://i.imgur.com/B0sMArq.jpg");
+      }
+      </style>
+        {% endblock %}
+  </head>
+  <body>
+    {% block jumbotron %}
+    HELLO!
+    {% endblock %}
+
+    {%block emoji1%}
+    <img class="card-img-top" src="https://i.pinimg.com/736x/25/b9/24/25b924f1d18fea2c7dfcb26a9905c1e8--funny-emoji-emoji-png.jpg" alt="cool emoji">
+    {%endblock%}
+
+    {%block emoji2%}
+    <img class="card-img-top" src="http://d2trtkcohkrm90.cloudfront.net/images/emoji/apple/ios-10/256/dizzy-face.png" alt="cool emoji">
+    {%endblock%}
+
+    {%block emoji3%}
+    <img class="card-img-top" src="https://studio.code.org/v3/assets/PvwT30-ip1ySeCzkxBElqA/complain.png" alt="cool emoji">
+    {%endblock%}
+
+    {% block travelimg1%}
+    <img class="img-fluid" src="http://d2trtkcohkrm90.cloudfront.net/images/emoji/apple/ios-10/256/woman-raising-hand-light-skin-tone.png" alt="hi emoji">
+    {%endblock%}
+
+    {%block travel1%}Hi{%endblock%}
+
+    {% block travelimg2%}
+    <img class="img-fluid" src="https://emojipedia-us.s3.amazonaws.com/thumbs/120/apple/96/bus_1f68c.png" alt="Van emoji">
+    {%endblock%}
+
+    {%block travel2%}
+    Van
+    {%endblock%}
+
+
+  </body>
+</html>
