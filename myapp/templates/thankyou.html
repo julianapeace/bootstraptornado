@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %} Thank You {% endblock %}</title>
+      {% block head %}
+    <style type="text/css">
+      .jumbotron {
+        background-color: black;
+        background: url("https://i.ytimg.com/vi/9HMzwFl5OLY/maxresdefault.jpg") no-repeat center top;
+      }
+    </style>
+    {%endblock%}
+  </head>
+  <body>
+    {% block jumbotron %} {%endblock%}
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {%endblock%}
+    {% block tipcalculator%}{% endblock%}
+  </body>
+</html>

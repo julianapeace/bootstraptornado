@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>    {% block title %}
+        Tip Calculator Answer
+        {% endblock %}
+      </title>
+      {% block head %}
+      <style type="text/css">
+      .jumbotron {
+        background-image: url("https://i.imgur.com/ltmWANZ.png");
+      }
+      </style>
+      {% endblock %}
+
+
+  </head>
+  <body>
+    {% block jumbotron %}Tip Calculator Answer{% endblock %}
+
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block tipcalculator %} {% endblock %}
+
+<h2>
+Bill: {{ bill }}
+Service: {{ service }}
+</h2>
+
+  </body>
+  {%block footer%} {% endblock %}
+</html>
