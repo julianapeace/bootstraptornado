@@ -17,6 +17,10 @@ ENV = Environment(
     autoescape=select_autoescape(['html', 'xml'])
 )
 
+from dotenv import load_dotenv
+load_dotenv('.env') #this is set in your environement for production. in deployment, it wil be stored in server.
+
+
 SES_CLIENT = boto3.client(
   'ses',
   aws_access_key_id=os.environ.get('AWS_ACCESS_KEY'),
