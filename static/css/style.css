@@ -28,10 +28,11 @@ input:required:invalid {
 }*/
 
 .contact{
-  /*margin-left: 25vh;
-  margin-right: 25vh;*/
-  /*width: 50%;*/
   padding: 10px;
+}
+
+.tipcalculator{
+  padding: 50px;
 }
 
 h1, h2, h3, h4 {
@@ -45,6 +46,7 @@ h1{
 
 .jumbotron {
   background-image: url("https://i.imgur.com/VU4Bvo4.jpg");
+  height: 100vh;
 }
 
 .vertical-center {
@@ -71,9 +73,6 @@ h1{
   .emojis {
     width: 100%;
   }
-  .jumbotron {
-    height: 100vh;
-  }
   .contact{
     padding: 100px;
   }
@@ -82,9 +81,6 @@ h1{
 @media all and (min-width: 768px) and (max-width: 1024px) {
   .navbar {
     width: 100%;
-  }
-  .jumbotron {
-    height: 100vh;
   }
   .travel img{
     max-width: 50%;
@@ -97,16 +93,10 @@ h1{
   .navbar {
     width: 100%;
   }
-  .jumbotron {
-    height: 100vh;
-  }
   .emojis {
     width: 100%;
   }
 }
 
 @media screen and (max-width: 768px) and (orientation: landscape) {
-  .jumbotron {
-    height: 100vh;
-  }
 }

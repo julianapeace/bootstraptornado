@@ -1,13 +1,9 @@
 {% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>    {% block title %}
+ {% block title %}
         Goodbye Title
         {% endblock %}
-      </title>
+
       {% block head %}
       <style type="text/css">
       .jumbotron {
@@ -17,8 +13,7 @@
       {% endblock %}
 
 
-  </head>
-  <body>
+
     {% block jumbotron %}
     GOODBYE
     {% endblock %}
@@ -53,6 +48,3 @@
     {% endblock %}
     {% block tipcalculator%}
     {% endblock %}
-
-  </body>
-</html>

@@ -1,36 +1,29 @@
 {% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>    {% block title %}
-        Tip Calculator Answer
-        {% endblock %}
-      </title>
-      {% block head %}
-      <style type="text/css">
-      .jumbotron {
-        background-image: url("https://i.imgur.com/ltmWANZ.png");
-      }
-      </style>
-      {% endblock %}
+{% block jumbotron %} Tip Calculator Answer
 
+<hr>
+<div class="tipcalculator">
+  <div class="row">
+    <div class="col-lg-6 col-md-6 col-sm-6">
+      <h1>Bill</h1>
+      <h1>Service</h1>
+      <h1>totalbill</h1>
+    </div>
+    <div class="col-lg-6 col-md-6 col-sm-6">
+      <h1>{{bill}}</h1>
+      <h1>{{service}}</h1>
+      <h1>{{totalbill}}</h1>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block title %}Tip Calculator Answer{% endblock %}
+{% block emoji %} {% endblock %}
+{% block travel %} {% endblock %}
+{% block contact %} {% endblock %}
+{% block tipcalculator %} {% endblock %}
 
-  </head>
-  <body>
-    {% block jumbotron %}Tip Calculator Answer{% endblock %}
+{% block content %}
 
-    {%block emoji%} {%endblock%}
-    {% block travel%} {%endblock%}
-    {% block contact %} {% endblock %}
-    {% block tipcalculator %} {% endblock %}
-
-<h2>
-Bill: {{ bill }}
-Service: {{ service }}
-</h2>
-
-  </body>
-  {%block footer%} {% endblock %}
-</html>
+{% endblock %}

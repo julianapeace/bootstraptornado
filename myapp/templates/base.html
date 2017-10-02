@@ -126,7 +126,7 @@
       <input type="hidden" name="secretstuff" value="dontlookhere">
 
       <label for="input1">Name</label><br>
-      <input name="name" id="input1" class="form-control form-control-lg" value="Julie" type="text"><br>
+      <input name="name" id="input1" class="form-control form-control-lg"  type="text"><br>
 
       <label for="email">Your email address</label><br>
       <input name="email" id="email" class="form-control form-control-lg" type="email" size="64" minlength="3" maxLength="64" placeholder="example@email.com" aria-describedby="emailHelp"><br>
@@ -167,7 +167,7 @@
     </form>
   </div>
   {% endblock%}
-
+{% block content %}{% endblock %}
 {% block footer %}
   <footer>
     <div class="container footer">

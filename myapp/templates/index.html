@@ -1,29 +1,11 @@
 {% extends "base.html" %}
 
-<!doctype html>
-<html>
-  <head>
-    <title>
-      {% block title %}
-      Home
-      {% endblock %}
-    </title>
-
-  </head>
-  <body>
+{% block title %}Home{% endblock %}
 
 
 {% block jumbotron %}We Are Awesome{% endblock %}
 
-
-    {% block contact %}
-    {% endblock %}
-    {% block tipcalculator%}
-    {% endblock%}
-
-    <footer>
-
-    </footer>
-
-  </body>
-</html>
+{% block contact %}
+{% endblock %}
+{% block tipcalculator%}
+{% endblock%}
