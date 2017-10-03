@@ -45,7 +45,7 @@ class TipCalcHandler(TemplateHandler):
     def post(self):
         bill = float(self.get_body_argument('bill'))
         service = self.get_body_argument('service')
-        people = self.get_body_argument('people')
+        people = float(self.get_body_argument('people'))
 
         if service == "Good":
             tip = bill * 0.20
