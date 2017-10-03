@@ -152,22 +152,49 @@
   <div class="tipcalculator">
     <form action="/tipcalc" method="post">
 
-      <label for="bill">Bill Amount: $</label>
-      <input name="bill" type="number" id="bill" step=".01" size="10" title="No dollar sign and no comma. Cents are optional" required/><br>
+    <div class="row">
+      <div class="col-lg-6">
+          <label for="bill">Bill Amount:</label>
+      </div>
+      <div class="col-lg-6">
+          <input name="bill" type="number" id="bill" step=".01" size="10" title="No dollar sign and no comma. Cents are optional" required/>
+      </div>
+    </div>
 
-      <label for="service">Service: </label>
-      <select class="form-control" id="service" name="service"><br>
-        <option>Good</option>
-        <option>Fair</option>
-        <option>Bad</option>
-      </select>
+    <div class="row">
+      <div class="col-lg-6">
+      <label for="people"># of People</label>
+      </div>
+      <div class="col-lg-6">
+          <input name="people" type="number" id="people" step="1" size="10" value="0" required/><br>
+      </div>
+    </div>
 
-    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+    <div class="row">
+      <div class="col-lg-6">
+        <label for="service">Service: </label>
+      </div>
+      <div class="col-lg-6">
+        <select class="form-control" id="service" required name="service"><br>
+          <option>Good</option>
+          <option>Fair</option>
+          <option>Bad</option>
+        </select>
+      </div>
+    </div>
 
-    </form>
-  </div>
+    <div class="row">
+      <div class="col-lg-6">
+      </div>
+      <div class="col-lg-6">
+            <button type="submit" class="btn btn-primary" name="button">Submit</button>
+      </div>
+    </div>
+  </form>
+    </div>
+
   {% endblock%}
-{% block content %}{% endblock %}
+
 {% block footer %}
   <footer>
     <div class="container footer">

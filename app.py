@@ -45,6 +45,7 @@ class TipCalcHandler(TemplateHandler):
     def post(self):
         bill = float(self.get_body_argument('bill'))
         service = self.get_body_argument('service')
+        people = self.get_body_argument('people')
 
         if service == "Good":
             tip = bill * 0.20
@@ -52,11 +53,13 @@ class TipCalcHandler(TemplateHandler):
             tip = bill * 0.15
         else:
             tip = bill * 0.10
-        totalbill = bill + tip
 
-        self.render_template('tip.html', {'bill': bill, 'service': service, 'totalbill': totalbill})
+        if people == 0:
+            totalbill = bill + tip
+        else:
+            totalbill = (bill + tip)/people
 
-        # self.write('Bill: {}\nService:{}\nTotalBill:{}'.format(bill, service, totalbill))
+        self.render_template('tip.html', {'bill': bill, 'service': service, 'people': people, 'totalbill': totalbill})
 
 class PageHandler(TemplateHandler):
     def post(self, page):
