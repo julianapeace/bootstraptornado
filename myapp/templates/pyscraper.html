@@ -1,0 +1,46 @@
+{% extends "base.html"%}
+
+
+
+{% block title %}Python Web Scraper{% endblock %}
+{% block head %}{% endblock %}
+{% block jumbotron%}
+
+
+<div class="pyscraper" style="text-align: left;">
+<form action="/py-scraper" method="post">
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="url">Enter URL to be scraped</label>
+    </div>
+    <div class="col-lg-6">
+      <input name="url" type="text" id="url" title="Enter URL to be scrapped"/></div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <label for="numwords">Enter number of words</label>
+    </div>
+    <div class="col-lg-6">
+          <input type="number" name="numwords" value="100">
+    </div>
+
+  </div>
+
+
+
+
+
+
+
+  <button type="submit" class="btn btn-primary" name="button">Submit</button>
+
+</form>
+</div>
+
+{% endblock %}
+
+    {% block tipcalculator %}{% endblock %}
+
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}

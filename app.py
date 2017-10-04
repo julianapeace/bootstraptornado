@@ -61,6 +61,40 @@ class TipCalcHandler(TemplateHandler):
 
         self.render_template('tip.html', {'bill': bill, 'service': service, 'people': people, 'totalbill': totalbill})
 
+from bs4 import BeautifulSoup
+import requests
+
+class PyScraper(TemplateHandler):
+    def post(self):
+        url = self.get_body_argument('url')
+        numwords = int(self.get_body_argument('numwords'))
+
+        r = requests.get(url)
+        html_content = r.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+        for script in soup(["script", "style"]):
+            script.extract()    # rip it out
+
+        soup = soup.get_text().strip().split()
+
+        uniquewords = {}
+
+        for i in soup:
+            if i not in uniquewords:
+                uniquewords[i] = 0
+        for i in soup:
+            uniquewords[i] += 1
+
+        order = sorted(uniquewords, key = uniquewords.get, reverse=True)
+        values = [uniquewords[key] for key in order]
+
+        
+        # uniquewords =[]
+        # for i in range(numwords):
+        #     uniquewords.append(order[i])
+
+        self.render_template('pyscrap.html', {'url': url, 'words': uniquewords})
+
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
@@ -98,6 +132,7 @@ def make_app():
         (r"/", MainHandler),
         (r"/page/(.*)", PageHandler),
         (r"/tipcalc", TipCalcHandler),
+        (r"/py-scraper", PyScraper),
         (
             r"/static/(.*)",
             tornado.web.StaticFileHandler,

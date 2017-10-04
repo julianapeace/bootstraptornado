@@ -1,0 +1,23 @@
+{% extends "base.html"%}
+
+
+
+{% block title %}Python Web Scraper{% endblock %}
+{% block head %}{% endblock %}
+
+{% block jumbotron%}
+Web Scraping Results for {{url}}<br>
+
+{% for words in words -%}
+<span style="font-size: 15px;"> {{words}} </span>
+{%- endfor %}
+
+<!-- {{words}} -->
+
+{% endblock %}
+
+    {% block tipcalculator %}{% endblock %}
+
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
