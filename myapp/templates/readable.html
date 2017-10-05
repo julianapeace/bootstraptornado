@@ -1,0 +1,15 @@
+{% extends "base.html" %} {% block title %} Read-Abilifier {% endblock %} {% block head %}
+<style type="text/css">
+  .jumbotron {
+    background-image: url("https://i.imgur.com/dugP1lu.jpg");
+  }
+</style>
+
+{% endblock %} {% block jumbotron %}Read-Able
+<div style="font-size: 30px;">
+  <form action="/readable" method="post">
+    <label for="url">Enter URL</label>
+    <input name="url" type="text" id="url" title="Enter URL to be scrapped" />
+    <button type="submit" class="btn btn-primary" name="button">Submit</button>
+  </form>
+</div>{% endblock %} {%block tipcalculator%} {%endblock%} {%block emoji%} {%endblock%} {% block travel%} {%endblock%} {% block contact %} {% endblock %} {%block footer%} {%endblock%}

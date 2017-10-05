@@ -88,12 +88,31 @@ class PyScraper(TemplateHandler):
         order = sorted(uniquewords, key = uniquewords.get, reverse=True)
         values = [uniquewords[key] for key in order]
 
-        
+
         # uniquewords =[]
         # for i in range(numwords):
         #     uniquewords.append(order[i])
 
         self.render_template('pyscrap.html', {'url': url, 'words': uniquewords})
+
+class Readable(TemplateHandler):
+    def post(self):
+        url = self.get_body_argument('url')
+
+        r = requests.get(url)
+        html_content = r.text
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        h1 = soup.find_all(["h1"]) #list of h1
+        p = soup.find_all(["p"]) #list of p
+
+        h1p = soup.find_all(["h1","p"])
+
+        soup = []
+        for i in h1p:
+            soup.append(i.get_text())
+
+        self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1': h1, 'p': p})
 
 class PageHandler(TemplateHandler):
     def post(self, page):
@@ -133,6 +152,7 @@ def make_app():
         (r"/page/(.*)", PageHandler),
         (r"/tipcalc", TipCalcHandler),
         (r"/py-scraper", PyScraper),
+        (r"/readable", Readable),
         (
             r"/static/(.*)",
             tornado.web.StaticFileHandler,

@@ -30,6 +30,13 @@ input:required:invalid {
 .contact{
   padding: 10px;
 }
+.readable{
+  max-width: 770px;
+  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  line-height: 50px;
+  margin-left: 50vh;
+}
 
 .tipcalculator{
   width: 50%;

@@ -5,7 +5,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-  <link rel="stylesheet" href="/static/css/style.css"> {% block head %} {% endblock %}
+  <link rel="stylesheet" href="/static/css/style.css">
+{% block head %} {% endblock %}
   <title>
     {% block title %} Working Title {% endblock %}
   </title>
@@ -36,6 +37,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/page/pyscraper.html">Py-Scraper |</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/page/readable.html">Read-Abilifier |</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/page/contact.html">Contact |</a>
@@ -200,6 +204,10 @@
   {% endblock%}
 
   {% block pyscraper%} {% endblock %}
+
+
+  {% block readable%} {% endblock %}
+
 
 {% block footer %}
   <footer>
