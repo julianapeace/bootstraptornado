@@ -1,0 +1,28 @@
+{% extends "base.html"%}
+{% block title %}Blog App{% endblock %}
+{% block head %}{% endblock %}
+
+{% block jumbotron%} Add Blog Post{% endblock %}
+
+{% block blog%}
+
+<form action="/addblogpost" method="post">
+
+  <label for="title">Title</label><br>
+  <input type="text" name="title" value=""><br>
+
+  <label for="body">Post Content</label><br>
+  <textarea name="body" rows="8" cols="80"></textarea><br>
+  
+  <button type="submit" name="button" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
+
+
+    {% block tipcalculator %}{% endblock %}
+
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}

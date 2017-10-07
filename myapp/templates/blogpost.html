@@ -1,0 +1,28 @@
+{% extends "blogbase.html"%}
+
+{% block title %}Blog | {{post.title}}{% endblock %}
+
+{% block blogtitle %}{{post.title}}{%endblock%}
+
+
+{% block blog%}
+<div class="content">
+  {{ post.html() |safe}}
+</div>
+
+<div class="created">
+  {{post.created}}
+</div>
+
+<div class="author">
+  <a href="https://twitter.com/{{post.author.twitter}}">Twitter: {{post.author.name}}</a>
+</div>
+<a href="/edit/{{post.slug}}" class="btn btn-primary">Edit</a>
+
+{% endblock %}
+
+    {% block tipcalculator %}{% endblock %}
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}

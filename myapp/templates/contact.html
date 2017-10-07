@@ -1,30 +1,18 @@
 {% extends "base.html" %}
-
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title> {% block title %} Contact Form {% endblock %}
-  </title>
+ {% block title %} Contact Form {% endblock %}
   {% block head %}
   <style type="text/css">
     .jumbotron {
-      /*background-image: url("https://yayasandmdi.files.wordpress.com/2016/01/tags-christmas-abstract-xmas-background-design-backgrounds.jpg");*/
       background: url("https://static.pexels.com/photos/279315/pexels-photo-279315.jpeg")no-repeat center top;
       background-color: white;
     }
   </style>
   {% endblock %}
-</head>
 
-<body>
+
+
   {% block jumbotron %} Let's Keep In Touch! {% endblock %}
 
   {%block emoji%} {%endblock%}
   {% block travel%} {%endblock%}
   {% block tipcalculator%}{% endblock %}
-
-</body>
-
-</html>

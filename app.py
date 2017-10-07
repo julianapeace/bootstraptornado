@@ -1,12 +1,12 @@
 import os  # deploy line: says this is the standard library
 import boto3
-
 import tornado.ioloop
 import tornado.web
 import tornado.log
-
+from bs4 import BeautifulSoup
+import requests
+from models import BlogPost, Author
 from dotenv import load_dotenv
-
 from jinja2 import \
     Environment, PackageLoader, select_autoescape
 
@@ -33,37 +33,56 @@ class TemplateHandler(tornado.web.RequestHandler):
     def render_template(self, tpl, context):
         template = ENV.get_template(tpl)
         self.write(template.render(**context))
-
-
 class MainHandler(TemplateHandler):
     def get(self):
         names = self.get_query_arguments('name')
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
-        self.render_template("index.html", {'names': names, 'amount': 42.55})
+        self.render_template("index.html",{})
+class BlogHandler(TemplateHandler):
+    def get(self, slug):
+        post = BlogPost.select().where(BlogPost.slug == slug).get()
+        self.render_template("blogpost.html", {'post': post})
+class PostHandler(TemplateHandler):
+    def post(self):
+        title = self.get_body_argument('title')
+        body = self.get_body_argument('body')
+
+        post = BlogPost.create(title=title, slug = title+"-post", body = body)
+        post.save()
+        posts = BlogPost.select().order_by(BlogPost.created.desc())
+        self.render_template('blog.html',{'posts':posts})
+class EditPostHandler(TemplateHandler):
+    def get(self, slug):
+        post = BlogPost.select().where(BlogPost.slug == slug).get()
+        self.render_template("editblog.html", {'post': post})
+class UpdatePostHandler(TemplateHandler):
+    def post(self):
+        title = self.get_body_argument('title')
+        body = self.get_body_argument('body')
+        slug = self.get_body_argument('slug')
+        post = BlogPost.select().where(BlogPost.slug == slug).get()
+        post.title = title
+        post.body = body
+        post.save()
+
+        self.redirect('/post/' + slug)
 
 class TipCalcHandler(TemplateHandler):
     def post(self):
         bill = float(self.get_body_argument('bill'))
         service = self.get_body_argument('service')
         people = float(self.get_body_argument('people'))
-
         if service == "Good":
             tip = bill * 0.20
         elif service == "Fair":
             tip = bill * 0.15
         else:
             tip = bill * 0.10
-
         if people == 0:
             totalbill = bill + tip
         else:
             totalbill = (bill + tip)/people
-
         self.render_template('tip.html', {'bill': bill, 'service': service, 'people': people, 'totalbill': totalbill})
-
-from bs4 import BeautifulSoup
-import requests
-
 class PyScraper(TemplateHandler):
     def post(self):
         url = self.get_body_argument('url')
@@ -94,7 +113,6 @@ class PyScraper(TemplateHandler):
         #     uniquewords.append(order[i])
 
         self.render_template('pyscrap.html', {'url': url, 'words': uniquewords})
-
 class Readable(TemplateHandler):
     def post(self):
         url = self.get_body_argument('url')
@@ -102,6 +120,8 @@ class Readable(TemplateHandler):
         r = requests.get(url)
         html_content = r.text
         soup = BeautifulSoup(html_content, 'html.parser')
+
+        kevin = soup.body
 
         h1 = soup.find_all(["h1"]) #list of h1
         p = soup.find_all(["p"]) #list of p
@@ -112,8 +132,8 @@ class Readable(TemplateHandler):
         for i in h1p:
             soup.append(i.get_text())
 
-        self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1': h1, 'p': p})
 
+        self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1': h1, 'p': p, 'kevin': kevin})
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
@@ -143,12 +163,17 @@ class PageHandler(TemplateHandler):
         self.set_header(
             'Cache-Control',
             'no-store, no-cache, must-revalidate, max-age=0')
-        self.render_template(page, {})
-
+        posts = BlogPost.select().order_by(BlogPost.created.desc())
+        self.render_template(page, {'posts': posts})
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
+        (r"/post/(.*)",BlogHandler),
+        (r"/addblogpost",PostHandler),
+
+        (r"/edit/(.*)",EditPostHandler),
+        (r"/update", UpdatePostHandler),
         (r"/page/(.*)", PageHandler),
         (r"/tipcalc", TipCalcHandler),
         (r"/py-scraper", PyScraper),
@@ -159,8 +184,6 @@ def make_app():
             {'path': 'static'}
         ),
     ], autoreload=True)
-
-
 if __name__ == "__main__":
     tornado.log.enable_pretty_logging()
     app = make_app()

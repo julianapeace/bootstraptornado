@@ -1,0 +1,26 @@
+{% extends "blogbase.html"%}
+{% block title %}Blog App{% endblock %}
+{% block head %}{% endblock %}
+
+{% block blog%}
+<ul>
+  {% for post in posts %}
+  <li>
+    <a href="/post/{{ post.slug }}">{{post.title}}</a>
+    <a href="/edit/{{post.slug}}" class="btn btn-primary">Edit</a>
+
+  </li>
+  {% endfor %}
+</ul>
+
+<a href="/page/addblog.html" class="btn btn-primary">Add Blog Post</a>
+
+{% endblock %}
+
+
+    {% block tipcalculator %}{% endblock %}
+
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}

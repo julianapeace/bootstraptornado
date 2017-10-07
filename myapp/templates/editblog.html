@@ -1,0 +1,26 @@
+{% extends "blogbase.html"%}
+
+{% block title %}Blog App{% endblock %}
+{% block head %}{% endblock %}
+
+{% block jumbotron%} Edit Blog Post {{post}} {% endblock %}
+
+{% block blog%}
+<form action="/update" method="post">
+  <input type="hidden" name="slug" value="{{post.slug}}">
+  <label for="title">Title</label><br>
+  <input type="text" name="title" value="{{post.title}}"><br>
+
+  <label for="body">Post Content</label><br>
+  <textarea name="body" rows="8" cols="80">{{post.body}}</textarea><br>
+
+  <button type="submit" name="button" class="btn btn-primary">Submit</button>
+</form>
+
+{% endblock %}
+
+    {% block tipcalculator %}{% endblock %}
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}

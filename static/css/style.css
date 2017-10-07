@@ -37,6 +37,18 @@ input:required:invalid {
   line-height: 50px;
   margin-left: 50vh;
 }
+.blogtitle{
+  font-family:'Quicksand', Helvetica, Arial, sands-serif;
+}
+.blogbody{
+  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
+}
+.blogpost{
+  max-width: 770px;
+  font-size: 20px;
+  line-height: 50px;
+  margin-left: 50vh;
+}
 
 .tipcalculator{
   width: 50%;
