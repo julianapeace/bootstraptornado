@@ -1,26 +1,28 @@
 {% extends "blogbase.html"%}
 
-{% block title %}Blog App{% endblock %}
-{% block head %}{% endblock %}
+{% block title %}Edit|{{post.title}}{% endblock %}
 
-{% block jumbotron%} Edit Blog Post {{post}} {% endblock %}
-
-{% block blog%}
+{% block editblog%}
 <form action="/update" method="post">
   <input type="hidden" name="slug" value="{{post.slug}}">
-  <label for="title">Title</label><br>
+
+  <label for="title">Title</label>
   <input type="text" name="title" value="{{post.title}}"><br>
 
+  <label for="author">Author</label>
+  <select name="author"class="form-control form-control-sm">
+    {% for author in authors%}
+    <option>{{author}}</option>
+    {% endfor %}
+    <option value="addnewauthor">Add New Author</option>
+  </select>
+
+  <br>
   <label for="body">Post Content</label><br>
   <textarea name="body" rows="8" cols="80">{{post.body}}</textarea><br>
 
   <button type="submit" name="button" class="btn btn-primary">Submit</button>
+
+  <button type="" name="" class="btn btn-outline-secondary"><a href="/page/blog.html">Cancel</a></button>
 </form>
-
 {% endblock %}
-
-    {% block tipcalculator %}{% endblock %}
-    {%block emoji%} {%endblock%}
-    {% block travel%} {%endblock%}
-    {% block contact %} {% endblock %}
-    {% block footer %} {% endblock %}

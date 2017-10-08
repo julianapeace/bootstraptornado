@@ -2,27 +2,15 @@
 
 {% block title %}Blog | {{post.title}}{% endblock %}
 
+{% block bloglist %}{% endblock %}
+
 {% block blogtitle %}{{post.title}}{%endblock%}
 
+{% block blogbody%}{{ post.html() |safe}}{% endblock %}
 
-{% block blog%}
-<div class="content">
-  {{ post.html() |safe}}
-</div>
-
-<div class="created">
-  {{post.created}}
-</div>
-
-<div class="author">
-  <a href="https://twitter.com/{{post.author.twitter}}">Twitter: {{post.author.name}}</a>
-</div>
-<a href="/edit/{{post.slug}}" class="btn btn-primary">Edit</a>
-
+{%block blogauthor%}<a href="https://twitter.com/{{post.author.twitter}}">Twitter: {{post.author.name}}</a>
+<a href="/edit/{{post.slug}}" class="btn btn-outline-secondary">Edit</a>
+<a href="/page/post.html" class="btn btn-outline-primary">OK</a>
 {% endblock %}
 
-    {% block tipcalculator %}{% endblock %}
-    {%block emoji%} {%endblock%}
-    {% block travel%} {%endblock%}
-    {% block contact %} {% endblock %}
-    {% block footer %} {% endblock %}
+{% block blogcreated%}{{post.created}} {%endblock%}

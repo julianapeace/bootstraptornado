@@ -1,0 +1,12 @@
+{% extends "blogbase.html"%}
+
+{% block title %}{{author.name}} | All Posts{% endblock %}
+
+
+{%block authorsposts%}
+
+  {% for post in authorsposts%}
+    {{post}}
+  {% endfor %}
+
+{% endblock %}

@@ -3,18 +3,17 @@
 {% block title %}Blog App{% endblock %}
 {% block head %}{% endblock %}
 
-{% block bloglist%}
+{% block authors%}
 <ul class="list-group">
-  {% for post in posts %}
+  {% for author in authors %}
   <li class="list-group-item">
-    <a href="/post/{{ post.slug }}">{{post.title}}</a>
-    <a href="/edit/{{ post.slug }}" class="btn btn-link" style="color: #ddd">Edit</a>
-
+    <a href="/author/{{ author.id }}">{{author.name}}</a>
   </li>
   {% endfor %}
 </ul>
 
 <a href="/page/addblog.html" class="btn btn-primary">Add Blog Post</a>
+
 {% endblock %}
 
 {% block blogpost %}{% endblock %}

@@ -30,24 +30,17 @@ input:required:invalid {
 .contact{
   padding: 10px;
 }
-.readable{
-  max-width: 770px;
-  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
-  font-size: 20px;
-  line-height: 50px;
-  margin-left: 50vh;
+
+.blogtitle, .bloglist, .blogbody, .authors, .readable, .addblog{
+  font-family:'Quicksand', Helvetica, Arial, sans-serif;
 }
-.blogtitle{
-  font-family:'Quicksand', Helvetica, Arial, sands-serif;
-}
-.blogbody{
-  font-family: 'Quicksand', Helvetica, Arial, sans-serif;
-}
-.blogpost{
+
+.bloglist, .blogpost, .authors, .readable, .editblog, .addblog{
   max-width: 770px;
   font-size: 20px;
   line-height: 50px;
   margin-left: 50vh;
+  margin-top: 100px;
 }
 
 .tipcalculator{
@@ -56,7 +49,7 @@ input:required:invalid {
 }
 
 h1, h2, h3, h4 {
-  text-align: center;
+  /*text-align: center;*/
 }
 
 h1{

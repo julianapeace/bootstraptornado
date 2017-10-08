@@ -1,28 +1,24 @@
-{% extends "base.html"%}
-{% block title %}Blog App{% endblock %}
-{% block head %}{% endblock %}
+{% extends "blogbase.html"%}
+{% block title %}Blog App | Add{% endblock %}
 
-{% block jumbotron%} Add Blog Post{% endblock %}
-
-{% block blog%}
-
+{% block addblog %}
 <form action="/addblogpost" method="post">
 
   <label for="title">Title</label><br>
   <input type="text" name="title" value=""><br>
 
+  <label for="author">Author</label>
+  <select name="author"class="form-control form-control-sm">
+    {% for author in authors%}
+    <option>{{author}}</option>
+    {% endfor %}
+    <option value="addnewauthor">Add New Author</option>
+  </select>
+
   <label for="body">Post Content</label><br>
   <textarea name="body" rows="8" cols="80"></textarea><br>
-  
+
   <button type="submit" name="button" class="btn btn-primary">Submit</button>
+  <a href="/page/blog.html" class="btn btn-outline-secondary">Cancel</a>
 </form>
-
 {% endblock %}
-
-
-    {% block tipcalculator %}{% endblock %}
-
-    {%block emoji%} {%endblock%}
-    {% block travel%} {%endblock%}
-    {% block contact %} {% endblock %}
-    {% block footer %} {% endblock %}

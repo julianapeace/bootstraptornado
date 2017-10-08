@@ -38,6 +38,10 @@ class MainHandler(TemplateHandler):
         names = self.get_query_arguments('name')
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html",{})
+class BlogAuthorHandler(TemplateHandler):
+    def get(self, authorid):
+        authorsposts = BlogPost.select().where(BlogPost.author_id == authorid).get()
+        self.render_template("authorsposts.html", {'authorsposts': authorsposts})
 class BlogHandler(TemplateHandler):
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
@@ -54,15 +58,24 @@ class PostHandler(TemplateHandler):
 class EditPostHandler(TemplateHandler):
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        self.render_template("editblog.html", {'post': post})
+        authors = Author.select()
+        self.render_template("editblog.html", {'post': post, 'authors': authors})
 class UpdatePostHandler(TemplateHandler):
     def post(self):
         title = self.get_body_argument('title')
         body = self.get_body_argument('body')
         slug = self.get_body_argument('slug')
+        author = self.get_body_argument('author')
+
+        if author == "addnewauthor":
+            Author.create(name=author)
+
+        newauthor = Author.select().where(Author.name == author)
         post = BlogPost.select().where(BlogPost.slug == slug).get()
+
         post.title = title
         post.body = body
+        post.author = newauthor
         post.save()
 
         self.redirect('/post/' + slug)
@@ -164,14 +177,15 @@ class PageHandler(TemplateHandler):
             'Cache-Control',
             'no-store, no-cache, must-revalidate, max-age=0')
         posts = BlogPost.select().order_by(BlogPost.created.desc())
-        self.render_template(page, {'posts': posts})
+        authors = Author.select()
+        self.render_template(page, {'posts': posts, 'authors':authors})
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/post/(.*)",BlogHandler),
         (r"/addblogpost",PostHandler),
-
+        (r"/author/(.*)", BlogAuthorHandler),
         (r"/edit/(.*)",EditPostHandler),
         (r"/update", UpdatePostHandler),
         (r"/page/(.*)", PageHandler),
