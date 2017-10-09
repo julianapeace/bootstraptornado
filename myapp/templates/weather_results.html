@@ -1,0 +1,31 @@
+{% extends "base.html"%}
+{% block title %}Weather API{% endblock %}
+{% block head %}
+      <style type="text/css">
+      .jumbotron {
+        background: url("/static/img/blur1.jpg") no-repeat center top;
+      }
+      </style>
+{% endblock %}
+
+{% block jumbotron%}
+
+  City: {{name}} <br>
+  Visibility: {{visibility}}<br>
+  Clouds: {{clouds}}<br>
+  Wind: {{wind}}<br>
+
+  {% for i in range(3) %}
+    {{order[i]}} : {{values[i]}}<br>
+  {% endfor %}
+
+  <a href="/page/weather.html" class="btn btn-primary">Back</a>
+
+{% endblock %}
+
+
+    {% block tipcalculator %}{% endblock %}
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}

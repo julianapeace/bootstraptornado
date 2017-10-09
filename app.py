@@ -34,11 +34,23 @@ class TemplateHandler(tornado.web.RequestHandler):
     def render_template(self, tpl, context):
         template = ENV.get_template(tpl)
         self.write(template.render(**context))
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
 class MainHandler(TemplateHandler):
     def get(self):
-        names = self.get_query_arguments('name')
+        # names = self.get_query_arguments('name')
+        if not self.current_user:
+            self.redirect("page/login.html")
+            return
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html",{})
+class LoginHandler(TemplateHandler):
+    def get(self):
+        username = self.get_body_argument('username')
+        password = self.get_body_argument('password')
+    def post(self):
+        self.set_secure_cookie("user", self.get_argument("username"))
+        self.redirect("/")
 class BlogAuthorHandler(TemplateHandler):
     def get(self, id):
         posts = BlogPost.select().where(BlogPost.author_id == id)
@@ -197,7 +209,6 @@ class WeatherHandler(TemplateHandler):
             newdata()
 
         self.render_template('weather_results.html',{'name':name, 'visibility': visibility, 'clouds':clouds, 'wind':wind, 'main':main, 'order':order, 'values':values})
-
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
@@ -233,6 +244,7 @@ class PageHandler(TemplateHandler):
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
+        (r"/login", LoginHandler),
         (r"/post/(.*)",BlogHandler),
         (r"/addblogpost",PostHandler),
         (r"/author/(.*)", BlogAuthorHandler),
@@ -248,7 +260,7 @@ def make_app():
             tornado.web.StaticFileHandler,
             {'path': 'static'}
         ),
-    ], autoreload=True)
+    ], cookie_secret="supersecretkey", autoreload=True)
 if __name__ == "__main__":
     tornado.log.enable_pretty_logging()
     app = make_app()

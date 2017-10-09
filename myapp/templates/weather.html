@@ -1,0 +1,25 @@
+{% extends "base.html"%}
+{% block title %}Weather API{% endblock %}
+{% block head %}
+      <style type="text/css">
+      .jumbotron {
+        background: url("/static/img/blur1.jpg") no-repeat center top;
+        background-size:100vh;
+      }
+
+      </style>
+{% endblock %}
+
+{% block jumbotron%}
+Enter City
+<form action="/weather" method="post">
+  <input type="text" name="city" value="">
+  <button type="submit" name="button" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
+
+    {% block tipcalculator %}{% endblock %}
+    {%block emoji%} {%endblock%}
+    {% block travel%} {%endblock%}
+    {% block contact %} {% endblock %}
+    {% block footer %} {% endblock %}
