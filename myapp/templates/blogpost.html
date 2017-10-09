@@ -9,8 +9,10 @@
 {% block blogbody%}{{ post.html() |safe}}{% endblock %}
 
 {%block blogauthor%}<a href="https://twitter.com/{{post.author.twitter}}">Twitter: {{post.author.name}}</a>
+<br>
 <a href="/edit/{{post.slug}}" class="btn btn-outline-secondary">Edit</a>
-<a href="/page/post.html" class="btn btn-outline-primary">OK</a>
+<a href="/page/blog.html" class="btn btn-primary">OK</a>
+<a href="/author/{{ post.author_id }}" class="btn btn-link" style="color: #ddd">Back to Author</a>
 {% endblock %}
 
 {% block blogcreated%}{{post.created}} {%endblock%}

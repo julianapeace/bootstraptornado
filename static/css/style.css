@@ -2,40 +2,15 @@
   max-width: 30%;
 }
 
-/*input:invalid {
-  background-color: #ffdddd;
-}
-
-form:invalid {
-  border: 5px solid #ffdddd;
-}
-
-input:valid {
-  background-color: #ddffdd;
-}
-
-form:valid {
-  border: 5px solid #ddffdd;
-}
-
-input:required {
-  border-color: #800000;
-  border-width: 3px;
-}
-
-input:required:invalid {
-  border-color: #C00000;
-}*/
-
 .contact{
   padding: 10px;
 }
 
-.blogtitle, .bloglist, .blogbody, .authors, .readable, .addblog{
+.bloglist, .blogpost, .authors, .readable, .editblog, .addblog, .authorsposts{
   font-family:'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-.bloglist, .blogpost, .authors, .readable, .editblog, .addblog{
+.bloglist, .blogpost, .authors, .readable, .editblog, .addblog, .authorsposts{
   max-width: 770px;
   font-size: 20px;
   line-height: 50px;
@@ -51,15 +26,22 @@ input:required:invalid {
 h1, h2, h3, h4 {
   /*text-align: center;*/
 }
-
 h1{
-  color: white;
-  text-shadow: 2px 2px 4px #000000;
+  color: #ddd;
+}
+
+.navbar-brand > h2{
+  font-family:'Quicksand', Helvetica, Arial, sans-serif;
+  color: #aaa;
+  /*text-shadow: 1px 1px 2px #000000;*/
 }
 
 .jumbotron {
-  background-image: url("https://i.imgur.com/VU4Bvo4.jpg");
+  background-image: url("/static/img/blur1.jpg");
   height: 100vh;
+}
+.jumbotron h1{
+  text-shadow: 2px 2px 4px #000000;
 }
 
 .vertical-center {

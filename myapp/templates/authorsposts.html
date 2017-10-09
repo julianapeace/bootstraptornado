@@ -1,12 +1,16 @@
 {% extends "blogbase.html"%}
 
-{% block title %}{{author.name}} | All Posts{% endblock %}
+{% block title %} {{author.name}}| All Posts{% endblock %}
 
 
 {%block authorsposts%}
+  <ul class="list-group">
+    {% for posts in posts %}
+    <li class="list-group-item">
+      <a href="/post/{{posts.slug}}">{{posts.title}}</a>
+      <a href="/edit/{{ posts.slug }}" class="btn btn-link" style="color: #ddd">Edit</a>
 
-  {% for post in authorsposts%}
-    {{post}}
-  {% endfor %}
-
+    </li>
+    {% endfor %}
+  </ul>
 {% endblock %}

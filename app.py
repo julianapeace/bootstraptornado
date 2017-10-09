@@ -39,9 +39,10 @@ class MainHandler(TemplateHandler):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html",{})
 class BlogAuthorHandler(TemplateHandler):
-    def get(self, authorid):
-        authorsposts = BlogPost.select().where(BlogPost.author_id == authorid).get()
-        self.render_template("authorsposts.html", {'authorsposts': authorsposts})
+    def get(self, id):
+        posts = BlogPost.select().where(BlogPost.author_id == id)
+        author = Author.select().where(Author.id == id)
+        self.render_template("authorsposts.html", {'posts': posts, 'author': author})
 class BlogHandler(TemplateHandler):
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
@@ -50,16 +51,30 @@ class PostHandler(TemplateHandler):
     def post(self):
         title = self.get_body_argument('title')
         body = self.get_body_argument('body')
+        author = self.get_body_argument('author')
+        twitter = self.get_body_argument('twitter')
 
-        post = BlogPost.create(title=title, slug = title+"-post", body = body)
+        if author == 'newauthor':
+            newauthor = self.get_body_argument('newauthor')
+            newtwitter = self.get_body_argument('newtwitter')
+            thisauthor = Author.get_or_create(name=newauthor, twitter=newtwitter)
+            a = str(thisauthor[0])
+            thisauthor = Author.select().where(Author.name == a).get()
+        else:
+            thisauthor = Author.get_or_create(name=author, twitter=twitter)
+            a = str(thisauthor[0])
+            thisauthor = Author.select().where(Author.name == a).get()
+
+        post = BlogPost.create(title=title, slug = title+"-post", body = body, author_id = thisauthor.id)
         post.save()
+
         posts = BlogPost.select().order_by(BlogPost.created.desc())
         self.render_template('blog.html',{'posts':posts})
 class EditPostHandler(TemplateHandler):
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
-        authors = Author.select()
-        self.render_template("editblog.html", {'post': post, 'authors': authors})
+        author = Author.select().where(Author.id == post.author_id).get()
+        self.render_template("editblog.html", {'post': post, 'author': author})
 class UpdatePostHandler(TemplateHandler):
     def post(self):
         title = self.get_body_argument('title')
@@ -79,7 +94,6 @@ class UpdatePostHandler(TemplateHandler):
         post.save()
 
         self.redirect('/post/' + slug)
-
 class TipCalcHandler(TemplateHandler):
     def post(self):
         bill = float(self.get_body_argument('bill'))
