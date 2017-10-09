@@ -3,9 +3,10 @@ import boto3
 import tornado.ioloop
 import tornado.web
 import tornado.log
+import datetime
 from bs4 import BeautifulSoup
 import requests
-from models import BlogPost, Author
+from models import BlogPost, Author, Weather
 from dotenv import load_dotenv
 from jinja2 import \
     Environment, PackageLoader, select_autoescape
@@ -158,6 +159,45 @@ class Readable(TemplateHandler):
 
 
         self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1p':h1p})
+class WeatherHandler(TemplateHandler):
+    def post(self):
+        def newdata():
+            city = self.get_body_argument('city')
+            appid = '00df836e9e091135970bc5e1f9fabf00'
+            payload = {'q': city, 'appid': appid}
+            r = requests.get('http://api.openweathermap.org/data/2.5/weather', params=payload)
+            data = r.json()
+
+            name = data['name']
+            wind = data['wind']['speed']
+            visibility = data['visibility']
+            clouds = data['clouds']['all']
+            main = data['main']
+
+            order = sorted(main, key=main.get)
+            values = [main[key] for key in order]
+
+            weather_data = Weather.create(name=name, response = data)
+            weather_data.save()
+
+        city = self.get_body_argument('city')
+        check = Weather.select().where(Weather.name==city).get()
+        checktime = datetime.datetime.utcnow() - datetime.timedelta(minutes=15)
+        if check != 0 and check.created > checktime:
+            #if createdtime is sooner than checktime
+            #dbentry has not expired. Still relavant.
+            name = check.name
+            wind = check.response['wind']['speed']
+            visibility = check.response['visibility']
+            clouds = check.response['clouds']['all']
+            main = check.response['main']
+            order = sorted(main, key=main.get)
+            values = [main[key] for key in order]
+        else:
+            newdata()
+
+        self.render_template('weather_results.html',{'name':name, 'visibility': visibility, 'clouds':clouds, 'wind':wind, 'main':main, 'order':order, 'values':values})
+
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
@@ -190,7 +230,6 @@ class PageHandler(TemplateHandler):
         posts = BlogPost.select().order_by(BlogPost.created.desc())
         authors = Author.select()
         self.render_template(page, {'posts': posts, 'authors':authors})
-
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
@@ -202,6 +241,7 @@ def make_app():
         (r"/page/(.*)", PageHandler),
         (r"/tipcalc", TipCalcHandler),
         (r"/py-scraper", PyScraper),
+        (r"/weather", WeatherHandler),
         (r"/readable", Readable),
         (
             r"/static/(.*)",

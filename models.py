@@ -2,19 +2,22 @@ import datetime
 import os
 import peewee
 from playhouse.db_url import connect
+from playhouse.postgres_ext import *
 import markdown2
 
 DB = connect(
   os.environ.get(
     'DATABASE_URL',
-    'postgres://localhost:5432/blog'
+    'postgres://localhost:5432/weatherapp'
     #5432 is the local post for postgres.
   )
 )
 
+db = PostgresqlExtDatabase('weatherapp', server_side_cursors=False, register_hstore=False)
+
 class BaseModel (peewee.Model):
     class Meta:
-        database = DB
+        database = db
 
 class Author (BaseModel):
     name = peewee.CharField(max_length=60)
@@ -41,7 +44,12 @@ class BlogPost (BaseModel):
         #if you ever have to print(post) it wont return something non-human friendly. good idea to print something unique like an id. useful for IT support on your app.
     def html(self):
         return markdown2.markdown(self.body)
-#create blog db
-#something called "migrations" peewee does a data migration
-#so when you say "run the first migration" you're running a python file. It could also be a numbered sequal file.
-#just make sure whatever you do here, when you go to dpeloy it you can do the same thing.
+
+class Weather (BaseModel):
+    name = peewee.CharField(max_length=60)
+    response = BinaryJSONField()
+    created = peewee.DateTimeField(
+              default=datetime.datetime.utcnow)
+
+    def __str__ (self):
+        return self.city_name
