@@ -123,23 +123,23 @@ class PyScraper(TemplateHandler):
 
         soup = soup.get_text().strip().split()
 
-        uniquewords = {}
+        words = {}
 
         for i in soup:
-            if i not in uniquewords:
-                uniquewords[i] = 0
+            if i not in words:
+                words[i] = 0
         for i in soup:
-            uniquewords[i] += 1
+            words[i] += 1
 
-        order = sorted(uniquewords, key = uniquewords.get, reverse=True)
-        values = [uniquewords[key] for key in order]
+        order = sorted(words, key = words.get, reverse=True)
+        values = [words[key] for key in order]
 
 
         # uniquewords =[]
         # for i in range(numwords):
         #     uniquewords.append(order[i])
 
-        self.render_template('pyscrap.html', {'url': url, 'words': uniquewords})
+        self.render_template('pyscrap.html', {'url': url, 'words': words})
 class Readable(TemplateHandler):
     def post(self):
         url = self.get_body_argument('url')
@@ -148,11 +148,8 @@ class Readable(TemplateHandler):
         html_content = r.text
         soup = BeautifulSoup(html_content, 'html.parser')
 
-        kevin = soup.body
-
         h1 = soup.find_all(["h1"]) #list of h1
         p = soup.find_all(["p"]) #list of p
-
         h1p = soup.find_all(["h1","p"])
 
         soup = []
@@ -160,7 +157,7 @@ class Readable(TemplateHandler):
             soup.append(i.get_text())
 
 
-        self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1': h1, 'p': p, 'kevin': kevin})
+        self.render_template('readable_result.html', {'url': url, 'soup': soup, 'h1p':h1p})
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')

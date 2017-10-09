@@ -5,12 +5,24 @@
 .contact{
   padding: 10px;
 }
+.readable{
+  font-family:'Quicksand', Helvetica, Arial, sans-serif;
+  max-width: 770px;
+  font-size: 20px;
+  line-height: 50px;
+  margin-left: 45vh;
+  margin-top: 100px;
+}
+.readable>h1{
+  color: #999;
+  font-weight: bold;
+}
 
-.bloglist, .blogpost, .authors, .readable, .editblog, .addblog, .authorsposts{
+.bloglist, .blogpost, .authors, .editblog, .addblog, .authorsposts{
   font-family:'Quicksand', Helvetica, Arial, sans-serif;
 }
 
-.bloglist, .blogpost, .authors, .readable, .editblog, .addblog, .authorsposts{
+.bloglist, .blogpost, .authors, .editblog, .addblog, .authorsposts{
   max-width: 770px;
   font-size: 20px;
   line-height: 50px;
