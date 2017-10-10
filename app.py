@@ -40,7 +40,6 @@ class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
-
 class TemplateHandler(BaseHandler):
     def render_template(self, tpl, context):
         template = ENV.get_template(tpl)
@@ -48,7 +47,6 @@ class TemplateHandler(BaseHandler):
 
 class MainHandler(TemplateHandler):
     def get(self):
-        print("SEEEEEE")
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html",{})
 class LoginHandler(TemplateHandler):
@@ -64,7 +62,6 @@ class LoginHandler(TemplateHandler):
     #set_secure_cookie(name, value, expires_days30): expires in 30 days. Sign and timestamps cookie so it can't be forged. Must specify cookie secret, should be long, rando sequence of bytes to be used as the HMAC secret for the signature. Unlike regular cookies, may contain arbitrary byte values not just unicode strings.
         email = self.get_argument('email')
         password = self.get_argument('password')
-        # email = self.get_argument('email')
         self.set_secure_cookie("user", email)
         self.redirect("/")
 class LogoutHandler(TemplateHandler, tornado.auth.GoogleOAuth2Mixin):
@@ -107,10 +104,7 @@ class PostHandler(TemplateHandler):
 
         posts = BlogPost.select().order_by(BlogPost.created.desc())
         self.render_template('blog.html',{'posts':posts})
-
-
 class EditPostHandler(TemplateHandler):
-     #must be used with settings>login_url
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
         author = Author.select().where(Author.id == post.author_id).get()
@@ -252,7 +246,7 @@ class GAuthLoginHandler(BaseHandler, tornado.auth.GoogleOAuth2Mixin):
                 # #google didn't give u an access token
                 # self.clear_all_cookies()
                 # raise tornado.web.HTTPError(500, 'Google authentication failed')
-
+            print("third comment")
             access_token = str(user['access_token'])
             print(access_token)
             http_client = self.get_auth_http_client() #returns the AsyncHTTPClient instance to be used for auth requests
@@ -313,9 +307,8 @@ class GAuthLoginHandler(BaseHandler, tornado.auth.GoogleOAuth2Mixin):
 settings = {
 "debug": True,
 "cookie_secret": "__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
-"google_oauth":{"key":"322712388163-oebemftlq5lnte6htu6onhosiquee1on.apps.googleusercontent.com", "secret":"Y9DMvHmxq4TpW5ublme3AGAP"},
+"google_oauth":{"key":"322712388163-oebemftlq5lnte6htu6onhosiquee1on.apps.googleusercontent.com", "secret":"GgMMnaGWNdDehSNIud4rT1i1"},
 "login_url": "/login",
-"google_redirect_url": "http://localhost:8081/google/auth",
 "xsrf_cookies": True,
 }
 class PageHandler(TemplateHandler):
@@ -350,8 +343,9 @@ class PageHandler(TemplateHandler):
         posts = BlogPost.select().order_by(BlogPost.created.desc())
         authors = Author.select()
         self.render_template(page, {'posts': posts, 'authors':authors})
-def make_app():
-    return tornado.web.Application([
+class make_app(tornado.web.Application):
+    def __init__(self):
+        handlers = [
         (r"/", MainHandler),
         # (r"/login", LoginHandler),
         (r"/login-google", GAuthLoginHandler),
@@ -370,7 +364,8 @@ def make_app():
             tornado.web.StaticFileHandler,
             {'path': 'static'}
         ),
-    ], autoreload=True, **settings)
+        ]
+        tornado.web.Application.__init__(self, handlers, autoreload=True, **settings)
 
 
 if __name__ == "__main__":
