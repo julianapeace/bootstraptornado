@@ -4,13 +4,14 @@
 
 
 {% block jumbotron %}
+<div class="g-signin2" data-onsuccess="onSignIn">Login with Google</div>
 
 <form class="" action="/login" method="post">
-<label for="username">Username</label>
-<input type="text" name="username" value="">
+<label for="email">Username</label>
+<input type="text" name="email" value="">
 <br>
 <label for="password">Password</label>
-<input type="text" name="password" value="">
+<input type="password" name="password" value="">
 <button type="submit" name="button" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}

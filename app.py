@@ -2,14 +2,18 @@ import os  # deploy line: says this is the standard library
 import boto3
 import tornado.ioloop
 import tornado.web
+import tornado.httpserver
 import tornado.log
+import tornado.auth
 import datetime
 from bs4 import BeautifulSoup
 import requests
-from models import BlogPost, Author, Weather
+from models import *
 from dotenv import load_dotenv
 from jinja2 import \
     Environment, PackageLoader, select_autoescape
+
+import json
 
 load_dotenv('.env') #this is set in your environement for production. in deployment, it wil be stored in server.
 
@@ -29,28 +33,44 @@ SES_CLIENT = boto3.client(
   region_name="us-west-2"
 )
 
+#Oauth secrets
+client_secrets = os.path.join(os.path.dirname(__file__),"client_secret.json")
 
-class TemplateHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
+
+
+class TemplateHandler(BaseHandler):
     def render_template(self, tpl, context):
         template = ENV.get_template(tpl)
         self.write(template.render(**context))
-    def get_current_user(self):
-        return self.get_secure_cookie("user")
+
 class MainHandler(TemplateHandler):
     def get(self):
-        # names = self.get_query_arguments('name')
-        if not self.current_user:
-            self.redirect("page/login.html")
-            return
+        print("SEEEEEE")
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
         self.render_template("index.html",{})
 class LoginHandler(TemplateHandler):
     def get(self):
-        username = self.get_body_argument('username')
-        password = self.get_body_argument('password')
-    def post(self):
-        self.set_secure_cookie("user", self.get_argument("username"))
+        #this is just a place to grab form login credentials (ex: username/pw login)
+        self.set_header(
+          'Cache-Control',
+          'no-store, no-cache, must-revalidate, max-age=0')
+        self.render_template("page/login.html",{})
+
+
+    def post(self):#shit gets stored.
+    #set_secure_cookie(name, value, expires_days30): expires in 30 days. Sign and timestamps cookie so it can't be forged. Must specify cookie secret, should be long, rando sequence of bytes to be used as the HMAC secret for the signature. Unlike regular cookies, may contain arbitrary byte values not just unicode strings.
+        email = self.get_argument('email')
+        password = self.get_argument('password')
+        # email = self.get_argument('email')
+        self.set_secure_cookie("user", email)
         self.redirect("/")
+class LogoutHandler(TemplateHandler, tornado.auth.GoogleOAuth2Mixin):
+    def get(self):
+        self.clear_cookie("user")
+        self.redirect("/?login=false")
 class BlogAuthorHandler(TemplateHandler):
     def get(self, id):
         posts = BlogPost.select().where(BlogPost.author_id == id)
@@ -61,6 +81,10 @@ class BlogHandler(TemplateHandler):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
         self.render_template("blogpost.html", {'post': post})
 class PostHandler(TemplateHandler):
+    def get_current_user(self):
+        return self.get_secure_cookie("user")
+
+     #must be used with settings>login_url
     def post(self):
         title = self.get_body_argument('title')
         body = self.get_body_argument('body')
@@ -83,7 +107,10 @@ class PostHandler(TemplateHandler):
 
         posts = BlogPost.select().order_by(BlogPost.created.desc())
         self.render_template('blog.html',{'posts':posts})
+
+
 class EditPostHandler(TemplateHandler):
+     #must be used with settings>login_url
     def get(self, slug):
         post = BlogPost.select().where(BlogPost.slug == slug).get()
         author = Author.select().where(Author.id == post.author_id).get()
@@ -209,6 +236,88 @@ class WeatherHandler(TemplateHandler):
             newdata()
 
         self.render_template('weather_results.html',{'name':name, 'visibility': visibility, 'clouds':clouds, 'wind':wind, 'main':main, 'order':order, 'values':values})
+class GAuthLoginHandler(BaseHandler, tornado.auth.GoogleOAuth2Mixin):
+    @tornado.gen.coroutine #for asynchronous generators. Any generator that yields objects must have this decorator
+    #returns a Future object. Exceptions are stored here. Devs may examine Future object or exception may go unnoticed.
+    def get(self):
+        print("get(self)")
+        if self.get_argument('code', False):
+            print("first if triggered")
+            #returns value of the arguement 'code', strip=false
+        #get_authenticated_user (redirect_uri, code, callback): handles the login for the Google user, returning an access token
+            user = yield self.get_authenticated_user(redirect_uri='http://localhost:8888/login-google',
+                code=self.get_argument('code'))
+            if not user:
+                print("not user second internal if")
+                # #google didn't give u an access token
+                # self.clear_all_cookies()
+                # raise tornado.web.HTTPError(500, 'Google authentication failed')
+
+            access_token = str(user['access_token'])
+            print(access_token)
+            http_client = self.get_auth_http_client() #returns the AsyncHTTPClient instance to be used for auth requests
+            response =  yield http_client.fetch('https://www.googleapis.com/oauth2/v1/userinfo?access_token='+access_token)
+            if not response:
+                print("not response..none found.")
+                self.clear_all_cookies()
+                raise tornado.web.HTTPError(500, 'Google authentication failed')
+
+            user = json.loads(response.body)#loads response into a json variable called user
+            # save user here, save to cookie or database. Can also save by access_token.
+
+            print(user)
+
+            # name = user['name']
+            # given_name = user['given_name']
+            # family_name = user['family_name']
+            # email = user['email']
+            # avatar = user['picture']
+            # user_id = user["id"]
+
+            self.set_secure_cookie('user', user['email'])
+            self.redirect('/')
+            return
+
+        elif self.get_secure_cookie('user'):
+            print("it worked.")
+            self.redirect('/')
+            return
+
+        else:
+            print("get the fuck out.")
+            yield self.authorize_redirect(
+                redirect_uri='http://localhost:8888/login-google',
+                client_id=self.settings['google_oauth']['key'],
+                scope=['email'],
+                response_type='code',
+                extra_params={'approval_prompt': 'auto'})
+
+# class GoogleOAuth2LoginHandler(tornado.web.RequestHandler,
+#                                tornado.auth.GoogleOAuth2Mixin):
+#     @tornado.gen.coroutine
+#     #this class copied from :http://www.tornadoweb.org/en/stable/auth.html
+#     def get(self):
+#         if self.get_argument('code', False):
+#             user = yield self.get_authenticated_user(
+#                 redirect_uri='/login',
+#                 code=self.get_argument('code'))
+#             # Save the user with e.g. set_secure_cookie
+#         else:
+#             yield self.authorize_redirect(
+#                 redirect_uri='http://localhost:8888/login-google',
+#                 client_id=self.settings['google_oauth']['key'],
+#                 scope=['profile', 'email'],
+#                 response_type='code',
+#                 extra_params={'approval_prompt': 'auto'})
+
+settings = {
+"debug": True,
+"cookie_secret": "__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
+"google_oauth":{"key":"322712388163-oebemftlq5lnte6htu6onhosiquee1on.apps.googleusercontent.com", "secret":"Y9DMvHmxq4TpW5ublme3AGAP"},
+"login_url": "/login",
+"google_redirect_url": "http://localhost:8081/google/auth",
+"xsrf_cookies": True,
+}
 class PageHandler(TemplateHandler):
     def post(self, page):
         self.set_header('Cache-Control','no-store, no-cache, must-revalidate, max-age=0')
@@ -244,7 +353,8 @@ class PageHandler(TemplateHandler):
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
-        (r"/login", LoginHandler),
+        # (r"/login", LoginHandler),
+        (r"/login-google", GAuthLoginHandler),
         (r"/post/(.*)",BlogHandler),
         (r"/addblogpost",PostHandler),
         (r"/author/(.*)", BlogAuthorHandler),
@@ -260,9 +370,12 @@ def make_app():
             tornado.web.StaticFileHandler,
             {'path': 'static'}
         ),
-    ], cookie_secret="supersecretkey", autoreload=True)
+    ], autoreload=True, **settings)
+
+
 if __name__ == "__main__":
     tornado.log.enable_pretty_logging()
     app = make_app()
+    server = tornado.httpserver.HTTPServer(app)
     app.listen(PORT, print('Server started on localhost:' + str(PORT)))
     tornado.ioloop.IOLoop.current().start()

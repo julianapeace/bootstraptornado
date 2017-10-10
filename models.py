@@ -5,19 +5,14 @@ from playhouse.db_url import connect
 from playhouse.postgres_ext import *
 import markdown2
 
-DB = connect(
-  os.environ.get(
-    'DATABASE_URL',
-    'postgres://localhost:5432/weatherapp'
+DB = connect(os.environ.get('DATABASE_URL','postgres://localhost:5432/blog'))
     #5432 is the local post for postgres.
-  )
-)
-
 db = PostgresqlExtDatabase('weatherapp', server_side_cursors=False, register_hstore=False)
 
 class BaseModel (peewee.Model):
     class Meta:
         database = db
+        database = DB
 
 class Author (BaseModel):
     name = peewee.CharField(max_length=60)
