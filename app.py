@@ -309,7 +309,7 @@ settings = {
 "cookie_secret": "__TODO:_GENERATE_YOUR_OWN_RANDOM_VALUE_HERE__",
 "google_oauth":{"key":"322712388163-oebemftlq5lnte6htu6onhosiquee1on.apps.googleusercontent.com", "secret":"GgMMnaGWNdDehSNIud4rT1i1"},
 "login_url": "/login",
-"xsrf_cookies": True,
+"xsrf_cookies": False,
 }
 class PageHandler(TemplateHandler):
     def post(self, page):
