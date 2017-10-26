@@ -347,7 +347,6 @@ class make_app(tornado.web.Application):
     def __init__(self):
         handlers = [
         (r"/", MainHandler),
-        # (r"/login", LoginHandler),
         (r"/login-google", GAuthLoginHandler),
         (r"/post/(.*)",BlogHandler),
         (r"/addblogpost",PostHandler),
