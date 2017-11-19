@@ -1,0 +1,20 @@
+GITHUB: https://github.com/tjensen/PyTexas2017
+
+Building asyn apps with tornado - mongodb, mysql, and redis, s3
+MONGODB:
+  Motor: async interface with MongoDB (laternative to pyMongo)
+    add async and await in front
+    THATS ALL
+
+REDIS:
+  aioredis:
+
+AWS S3:
+  Boto 3: not asynchronous, but can be worked around. Aiobotocore, has partial support for some aws services, including S3.
+
+  to do it, need to write a wrpaper class.
+
+AsyncHTTPClient:
+  use it when trying to access something without a library. Don't need to write a wrapper fnc. Says its pretty easy to use, like requests library.
+
+Tornado has a Multi function. can pass in list of objects and run it all in parallel. if one of them returns, it'll come back as a list. if it raises, it gets bubbled up as default. 
